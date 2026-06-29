@@ -1,42 +1,74 @@
-                            ┌───────────────────────┐
-                            │  Frontend (React)     │
-                            │  Port 3000            │
-                            └───────────┬───────────┘
-                                        │
-                            ┌───────────▼───────────┐
-                            │   API Gateway         │
-                            │   Port 4000           │
-                            │ (JWT, rate limit,     │
-                            │  circuit breaker)     │
-                            └───┬───────┬───────┬───┘
-              ┌─────────────────┼───────┼───────┼───────────────┐
-              │                 │       │       │               │
-   ┌──────────▼──────┐ ┌────────▼─┐ ┌───▼────┐ ┌▼──────────┐ ┌──▼──────────┐
-   │ User Service    │ │ Search   │ │ Admin  │ │ Booking   │ │ Payment     │
-   │ Port 4001       │ │ 4002     │ │ 4003   │ │ 4005      │ │ 4006        │
-   └────────┬────────┘ └────┬─────┘ └───┬────┘ └─────┬─────┘ └─────┬───────┘
-            │               │           │            │             │
-            │          ┌────▼──────┐    │     ┌──────▼─────┐       │
-            │          │ Inventory │    │     │ Notification│      │
-            │          │ 4007      │    │     │ 4004 (Kafka)│      │
-            │          └────┬──────┘    │     └──────┬──────┘      │
-            │               │           │            │             │
-            └───────────────┴───────────┴────────────┴─────────────┘
-                                      │
-                ┌─────────────────────┼─────────────────────┐
-                │                     │                     │
-        ┌───────▼──────┐    ┌─────────▼────────┐   ┌────────▼────────┐
-        │  PostgreSQL  │    │  Redis Stack     │   │   Kafka         │
-        │  Port 5432   │    │  Port 6379/8001  │   │   Port 9092/9093│
-        └──────────────┘    └──────────────────┘   └─────────────────┘
-                                                            │
-                                                  ┌─────────▼─────────┐
-                                                  │  Elasticsearch    │
-                                                  │  Port 9200        │
-                                                  └───────────────────┘
-Highlights:
+# 🚆 IRCTC Backend
 
-- API Gateway is the single entrypoint for the frontend; it proxies to the right service and enforces JWT, rate limits, and circuit breakers.
-- Database-per-service — each service owns its own Postgres database, search-service uses Elasticsearch.
-- Event-driven — Kafka decouples booking, payment, inventory, search and notification flows. Topics are centralized in shared/constants/kafka-topics.js.
-- Notification service has no HTTP API — it is purely a Kafka consumer that sends emails via SendGrid.
+A scalable backend system inspired by the IRCTC railway reservation platform. The project focuses on building a production-ready backend capable of handling train search, ticket booking, user authentication, schedule management, and high-concurrency booking scenarios.
+
+## ✨ Key Highlights
+
+* RESTful API architecture
+* Secure authentication and authorization
+* Train search and route discovery
+* Seat booking and ticket management
+* Schedule management for trains
+* Transaction-safe booking workflow
+* Search optimization for fast train lookup
+* Scalable architecture designed for high traffic
+* Modular and maintainable codebase
+* Error handling and centralized middleware
+* Database indexing for efficient queries
+* Clean project structure following backend best practices
+
+## 🎯 Goals
+
+* Simulate a real-world railway reservation system.
+* Handle concurrent booking requests safely.
+* Provide fast search and booking operations.
+* Demonstrate scalable backend architecture and design patterns.
+* Serve as a learning project for distributed systems and backend engineering.
+
+## 📌 Features
+
+* User Registration & Login
+* JWT Authentication
+* Train Management
+* Station Management
+* Schedule Management
+* Train Search
+* Seat Availability
+* Ticket Booking
+* Booking History
+* Booking Cancellation
+* Role-based Access Control
+* Validation & Error Handling
+
+## 🏗️ Architecture
+
+The project is designed with a modular architecture where each component has a single responsibility. APIs are separated into controllers, services, models, routes, and middleware, making the codebase easier to maintain, test, and extend.
+
+## 🚀 Future Improvements
+
+* Waiting list and RAC management
+* Dynamic pricing
+* Tatkal booking
+* Payment gateway integration
+* Notification service (Email/SMS)
+* Kafka-based event-driven architecture
+* Microservices migration
+* Redis caching
+* Monitoring & logging dashboards
+* Docker and Kubernetes deployment
+* CI/CD pipeline
+
+## 📖 Learning Objectives
+
+This project demonstrates concepts such as:
+
+* Backend System Design
+* REST API Development
+* Authentication & Authorization
+* Database Design
+* Search Optimization
+* Concurrency Handling
+* Scalable Backend Development
+* Clean Code Principles
+* Error Handling
+* Performance Optimization
